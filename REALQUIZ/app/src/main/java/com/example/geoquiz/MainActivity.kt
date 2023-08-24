@@ -37,24 +37,28 @@ class MainActivity : AppCompatActivity() {
 
         binding.nextButton.setOnClickListener {
             currentIndex = (currentIndex + 1) % questionBank.size
+            updateQuestion()
+        }
+
+        binding.backButton.setOnClickListener {
+            currentIndex = (currentIndex - 1) % questionBank.size
+            updateQuestion()
+        }
+
+        updateQuestion()
+        }
+        private fun updateQuestion() {
             val questionTextResId = questionBank[currentIndex].textResId
             binding.questionTextView.setText(questionTextResId)
         }
 
-        updateQuestion()
-    }
-    private fun updateQuestion() {
-        val questionTextResId = questionBank[currentIndex].textResId
-        binding.questionTextView.setText(questionTextResId)
-    }
-
-    private fun checkAnswer(userAnswer: Boolean) {
-        val correctAnswer = questionBank[currentIndex].answer
-        val messageResId = if (userAnswer == correctAnswer) {
-            R.string.correct_toast
-        } else {
-            R.string.incorrect_toast
+        private fun checkAnswer(userAnswer: Boolean) {
+            val correctAnswer = questionBank[currentIndex].answer
+            val messageResId = if (userAnswer == correctAnswer) {
+                R.string.correct_toast
+            } else {
+                R.string.incorrect_toast
+            }
+            Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
         }
-        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
-    }
 }
