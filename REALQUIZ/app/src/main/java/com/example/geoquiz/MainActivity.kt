@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import com.example.geoquiz.databinding.ActivityMainBinding
 import android.util.Log
-
+import androidx.activity.result.contract.ActivityResultContracts
 
 
 private const val TAG = "MainActivity"
@@ -18,11 +18,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
 
-
-
     private var currentIndex = 0
 
     private val quizViewModel: QuizViewModel by viewModels()
+
+    private val cheatLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        // Handle the result
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,10 +91,10 @@ class MainActivity : AppCompatActivity() {
 
         private fun checkAnswer(userAnswer: Boolean) {
             val correctAnswer = quizViewModel.currentQuestionAnswer
-            val messageResId = if (userAnswer == correctAnswer) {
-                R.string.correct_toast
-            } else {
-                R.string.incorrect_toast
+            val messageResId = when {
+                quizViewModel.isCheater -> R.string.judgment_toast
+                userAnswer == correctAnswer -> R.string.correct_toast
+                else -> R.string.incorrect_toast
             }
             Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
         }
