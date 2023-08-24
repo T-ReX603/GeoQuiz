@@ -50,6 +50,12 @@ class MainActivity : AppCompatActivity() {
             quizViewModel.moveToBack()
             updateQuestion()
         }
+        binding.cheatButton.setOnClickListener {
+            // Start CheatActivity
+            val answerIsTrue = quizViewModel.currentQuestionAnswer
+            val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
+            cheatLauncher.launch(intent)
+        }
 
         updateQuestion()
         }
