@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import com.example.geoquiz.databinding.ActivityMainBinding
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
+import android.app.Activity
 
 
 private const val TAG = "MainActivity"
@@ -26,6 +27,10 @@ class MainActivity : AppCompatActivity() {
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         // Handle the result
+        if (result.resultCode == Activity.RESULT_OK) {
+            quizViewModel.isCheater =
+                result.data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
